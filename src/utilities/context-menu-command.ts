@@ -7,7 +7,7 @@ export function registerCommand(apiKey: string) {
 
     /*Refactor */
     vscode.commands.registerCommand("vscode-ai-assistant.refactor", () => {
-        refactorCode(apiKey)
+        refactorCode(apiKey);
     });
 
     /*Add Comment */
@@ -21,9 +21,9 @@ export function registerCommand(apiKey: string) {
     });
 }
 /**
- * Refactor code via ChatGpt
+ * Refactor code via AiAssistant
  * @param apiKey :string
- * @returns 
+ * @returns
  */
 function refactorCode(apiKey: string) {
     const textEditor = vscode.window.activeTextEditor;
@@ -41,9 +41,9 @@ function refactorCode(apiKey: string) {
 }
 
 /**
- * Add comments code via ChatGpt
+ * Add comments code via AiAssistant
  * @param apiKey :string
- * @returns 
+ * @returns
  */
 function addComment(apiKey: string) {
     const textEditor = vscode.window.activeTextEditor;
@@ -78,16 +78,16 @@ function addComment(apiKey: string) {
 
             promptToTextDavinci003(prompt, apiKey).then(result => {
                 textEditor.edit(editBuilder => editBuilder.replace(textEditor.selection, result + "\n" + selectedText));
-            })
+            });
             break;
     }
 
 }
 
 /**
- * Add documents via ChatGpt
+ * Add documents via AiAssistant
  * @param apiKey :string
- * @returns 
+ * @returns
  */
 function addDocument(apiKey: string) {
     const textEditor = vscode.window.activeTextEditor;
@@ -164,7 +164,7 @@ function addDocument(apiKey: string) {
 
 
             token.onCancellationRequested(() => {
-                customCancellationToken?.cancel()
+                customCancellationToken?.cancel();
                 console.log("User canceled the long running operation");
             });
 

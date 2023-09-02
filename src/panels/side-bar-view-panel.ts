@@ -47,7 +47,7 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 			const command = message.command;
 			switch (command) {
 				case "start-chat-command":
-					this.startChatGptWebViewPanel();
+					this.startAiAssistantWebViewPanel();
 					break;
 
 				case "image-buton-clicked-command":
@@ -65,14 +65,14 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 	}
 
 	/**
-	 * start main panel. 
+	 * start main panel.
 	 */
-	private startChatGptWebViewPanel(): void {
+	private startAiAssistantWebViewPanel(): void {
 		vscode.commands.executeCommand('vscode-ai-assistant.start');
 	}
 
 	/**
-	 * start image main  panel. 
+	 * start image main  panel.
 	 */
 	private startImageWebViewPanel(): void {
 		vscode.commands.executeCommand('vscode-ai-assistant.start-image');
@@ -107,23 +107,23 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 				-->
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<link href="${styleVSCodeUri}" rel="stylesheet">			
+				<link href="${styleVSCodeUri}" rel="stylesheet">
 				<title>Panel</title>
 			</head>
 			<body>
 
 			<div class="flex-container">
-				<button id="start-ai-assistant-button">New Chat</button>			
+				<button id="start-ai-assistant-button">New Chat</button>
 				<button id="image-generate-button" class="success">Images</button>
 			</div>
 			<p class="p-header mt-20" >General Settings</p>
 			<div class="form-flex-container">
 				<label>Api Key:</label>
-				<input id="api-key-text-field-id" placeholder="OpenAi api key." />							
-			</div>		
+				<input id="api-key-text-field-id" placeholder="OpenAi api key." />
+			</div>
 			<div class="form-flex-container">
 				<label>Temp:</label>
-				<input id="temperature-text-field-id" placeholder="0.8" />				
+				<input id="temperature-text-field-id" placeholder="0.8" />
 			</div>
 			<span class="info-message">
 				What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
@@ -131,14 +131,14 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 			<p class="p-header mt-20">Images Settings</p>
 			<div class="form-flex-container">
 				<label>Response Number:</label>
-				<input id="image-number-text-field-id" placeholder="Number of generated images." />							
-			</div>	
+				<input id="image-number-text-field-id" placeholder="Number of generated images." />
+			</div>
 			<span class="info-message">
 				Smaller sizes are faster to generate. You can request 1-5 images at a time using the n parameter.
-			</span>		
+			</span>
 			<div class="form-flex-container">
 				<label>Size:</label>
-				<input id="image-size-text-field-id" placeholder="Size of images like '1024x1024'" />							
+				<input id="image-size-text-field-id" placeholder="Size of images like '1024x1024'" />
 			</div>
 			<span class="info-message">
 				Generated images can have a size of 256x256, 512x512, or 1024x1024 pixels.
@@ -146,7 +146,7 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 			<div class="flex-container">
 				<button id="api-key-save-button-id">Save</button>
 			</div>
-		
+
 			<script nonce="${nonce}" src="${scriptUri}"></script>
 			<div class="model">
 				<p> Editor model:<a href="https://platform.openai.com/docs/models/gpt-3-5"> ${'text-davinci-003'}</a></p>

@@ -77,7 +77,7 @@ function handleSaveClick() {
         temperature: temperatureTextField?.value,
         responseNumber: imageNumberTextField?.value,
         imageSize: imageSizeTextField?.value
-    }
+    };
     vscode.postMessage({
         command: "save-settings",
         data: data,

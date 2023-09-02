@@ -53,7 +53,7 @@ function main() {
                 case 'image-urls-answer':
                     // Append answer.
                     const imageList = message.data as any[];
-                    updateImageList(imageList)
+                    updateImageList(imageList);
                     hideProgressRing();
                     break;
                 case 'image-error-answer':
@@ -88,7 +88,7 @@ function updateImageList(imageUrls: any[]) {
                 index++;
 
                 const galleryDivTag = document.createElement('div');
-                galleryDivTag.className = "gallery"
+                galleryDivTag.className = "gallery";
 
                 const aTag = document.createElement('a');
                 aTag.target = '_blank';

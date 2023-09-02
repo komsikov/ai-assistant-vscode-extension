@@ -90,7 +90,7 @@ function main() {
                 case 'image-urls-answer':
                     // Append answer.
                     const imageList = message.data as any[];
-                    updateImageList(imageList)
+                    updateImageList(imageList);
                     hideProgressRing();
                     break;
                 case 'image-error-answer':
@@ -149,7 +149,7 @@ function handleClearHistoryButtonClick() {
         command: "clear-history",
     });
 
-    updateHistoryList()
+    updateHistoryList();
 }
 
 /**
@@ -167,12 +167,12 @@ function updateHistoryList() {
 
                 index++;
                 const spanContainer = document.createElement('span');
-                spanContainer.id = "container-span-id"
-                spanContainer.className = "flex-container"
+                spanContainer.id = "container-span-id";
+                spanContainer.className = "flex-container";
                 spanContainer.style.marginTop = '15px';
 
                 const spanNumber = document.createElement('span');
-                spanNumber.id = "span-number-id"
+                spanNumber.id = "span-number-id";
                 spanNumber.textContent = index + ') ';
                 spanNumber.style.minWidth = '10px';
                 spanNumber.style.width = '10px';
@@ -215,7 +215,7 @@ function addHistory(content: string) {
     if (content != undefined) {
         if (searchHistory.length < 10) {
             if (!searchHistory.includes(content))
-                searchHistory.unshift(content);
+                {searchHistory.unshift(content);}
         }
         if (searchHistory.length == 10) {
             searchHistory.pop();
@@ -247,7 +247,7 @@ function updateImageList(imageUrls: any[]) {
                 index++;
 
                 const galleryDivTag = document.createElement('div');
-                galleryDivTag.className = "gallery"
+                galleryDivTag.className = "gallery";
 
                 const aTag = document.createElement('a');
                 aTag.target = '_blank';

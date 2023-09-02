@@ -3,12 +3,12 @@ import { TextDecoderStream } from 'node:stream/web';
 import { Observable } from 'rxjs';
 
 /**
- * Create asnyc request to ChatGpt api gets a response.
- * @param question is that want to ask to ChatGpt.
- * @param apikey of ChatGpt.
- * @returns 
+ * Create asnyc request to AiAssistant api gets a response.
+ * @param question is that want to ask to AiAssistant.
+ * @param apikey of AiAssistant.
+ * @returns
  */
-export async function askToChatGpt(query: string | undefined, apiKey: string) {
+export async function askToAiAssistant(query: string | undefined, apiKey: string) {
     try {
         // 👇️ const response: Response
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -43,13 +43,13 @@ export async function askToChatGpt(query: string | undefined, apiKey: string) {
 }
 
 /**
- * Create asnyc request to ChatGpt api and gets straem.
- * @param question is that want to ask to ChatGpt.
- * @param apikey of ChatGpt.
+ * Create asnyc request to AiAssistant api and gets straem.
+ * @param question is that want to ask to AiAssistant.
+ * @param apikey of AiAssistant.
  * @param temperature.
- * @returns 
+ * @returns
  */
-export function askToChatGptAsStream(query: string | undefined, apiKey: string, temperature: number): Observable<string> {
+export function askToAiAssistantAsStream(query: string | undefined, apiKey: string, temperature: number): Observable<string> {
 
     return new Observable<string>(observer => {
         // 👇️ const response: Response
@@ -131,14 +131,14 @@ export async function promptToTextDavinci003(prompt: string, apikey: string) {
 }
 
 /**
- * Create asnyc request to ChatGpt api to generate a new images.
- * @param prompt 
- * @param apiKey 
- * @param n 
- * @param size 
- * @returns 
+ * Create asnyc request to AiAssistant api to generate a new images.
+ * @param prompt
+ * @param apiKey
+ * @param n
+ * @param size
+ * @returns
  */
-export async function imageGenerationeFromChatGpt(prompt: string | undefined, apiKey: string, n: number = 1, size: string = "1024x1024") {
+export async function imageGenerationeFromAiAssistant(prompt: string | undefined, apiKey: string, n: number = 1, size: string = "1024x1024") {
     try {
         // 👇️ const response: Response
         const response = await fetch('https://api.openai.com/v1/images/generations', {

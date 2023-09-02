@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
 import { getStoreData, getNonce, getAsWebviewUri, setHistoryData, getVSCodeUri, getHistoryData } from "../utilities/utility.service";
-import { askToChatGptAsStream } from "../utilities/ai-assistant-api.service";
+import { askToAiAssistantAsStream } from "../utilities/ai-assistant-api.service";
 
 /**
  * Webview panel class
  */
-export class ChatGptPanel {
-    public static currentPanel: ChatGptPanel | undefined;
+export class AiAssistantPanel {
+    public static currentPanel: AiAssistantPanel | undefined;
     private readonly _panel: vscode.WebviewPanel;
     private _disposables: vscode.Disposable[] = [];
     private _context: vscode.ExtensionContext;
@@ -26,7 +26,7 @@ export class ChatGptPanel {
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
         this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri);
-        this._setWebviewMessageListener(this._panel.webview);     
+        this._setWebviewMessageListener(this._panel.webview);
 
         this.sendHistoryAgain();
     }
@@ -36,9 +36,9 @@ export class ChatGptPanel {
      * @param context :vscode.ExtensionContext.
     */
     public static render(context: vscode.ExtensionContext) {
-        // if exist show 
-        if (ChatGptPanel.currentPanel) {
-            ChatGptPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
+        // if exist show
+        if (AiAssistantPanel.currentPanel) {
+            AiAssistantPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
         } else {
 
             // if not exist create a new one.
@@ -57,18 +57,18 @@ export class ChatGptPanel {
             };
             panel.iconPath = icon;
 
-            ChatGptPanel.currentPanel = new ChatGptPanel(context, panel, extensionUri);
+            AiAssistantPanel.currentPanel = new AiAssistantPanel(context, panel, extensionUri);
         }
 
         const historyData = getHistoryData(context);
-        ChatGptPanel.currentPanel._panel.webview.postMessage({ command: 'history-data', data: historyData });
+        AiAssistantPanel.currentPanel._panel.webview.postMessage({ command: 'history-data', data: historyData });
     }
 
     /**
      * Dispose panel.
      */
     public dispose() {
-        ChatGptPanel.currentPanel = undefined;
+        AiAssistantPanel.currentPanel = undefined;
 
         this._panel.dispose();
 
@@ -91,7 +91,7 @@ export class ChatGptPanel {
 
                 switch (command) {
                     case "press-ask-button":
-                        this.askToChatGpt(message.data);
+                        this.askToAiAssistant(message.data);
                         this.addHistoryToStore(message.data);
                         return;
                     case "history-question-clicked":
@@ -134,8 +134,8 @@ export class ChatGptPanel {
             <link href="${styleVSCodeUri}" rel="stylesheet">
             <link rel="icon" type="image/jpeg" href="${logoMainPath}">
           </head>
-          <body>          
-            <p class="answer-header mt-30"> Answer : </p>            
+          <body>
+            <p class="answer-header mt-30"> Answer : </p>
             <pre><code class="code" id="answers-id"></code></pre>
             <vscode-text-area class="text-area mt-20" id="question-text-id" cols="100">Question:</vscode-text-area>
             <div class="flex-container">
@@ -155,11 +155,11 @@ export class ChatGptPanel {
     }
 
     /**
-     * Ask history question to ChatGpt and send 'history-question-clicked' command with data to mainview.js.
+     * Ask history question to AiAssistant and send 'history-question-clicked' command with data to mainview.js.
      * @param hisrtoryQuestion :string
      */
-    public clickHistoryQuestion(hisrtoryQuestion: string) {
-        this.askToChatGpt(hisrtoryQuestion);
+    public clickHistoryQuestion(historyQuestion: string) {
+        this.askToAiAssistant(historyQuestion);
     }
 
     public sendHistoryAgain() {
@@ -168,26 +168,26 @@ export class ChatGptPanel {
     }
 
     /**
-     * Ask to ChatGpt a question ans send 'answer' command with data to mainview.js.
+     * Ask to AiAssistant a question ans send 'answer' command with data to mainview.js.
      * @param question :string
      */
-    private askToChatGpt(question: string) {
+    private askToAiAssistant(question: string) {
         const storeData = getStoreData(this._context);
         const existApiKey = storeData.apiKey;
         const existTemperature = storeData.temperature;
         if (existApiKey == undefined || existApiKey == null || existApiKey == '') {
-            vscode.window.showInformationMessage('Please add your ChatGpt api key!');
+            vscode.window.showInformationMessage('Please add your AiAssistant api key!');
         } else if (existTemperature == undefined || existTemperature == null || existTemperature == 0) {
             vscode.window.showInformationMessage('Please add temperature!');
         }
         else {
-            askToChatGptAsStream(question, existApiKey, existTemperature).subscribe(answer => {
-                ChatGptPanel.currentPanel?._panel.webview.postMessage({ command: 'answer', data: answer });
+            askToAiAssistantAsStream(question, existApiKey, existTemperature).subscribe(answer => {
+                AiAssistantPanel.currentPanel?._panel.webview.postMessage({ command: 'answer', data: answer });
             });
         }
     }
 
-    clearHistory() {       
+    clearHistory() {
         this.searchHistory=[];
         setHistoryData(this._context, this.searchHistory);
     }

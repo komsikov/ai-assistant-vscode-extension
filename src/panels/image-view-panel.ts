@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { getStoreData, getNonce, getAsWebviewUri, getVSCodeUri, getHistoryData } from "../utilities/utility.service";
-import { imageGenerationeFromChatGpt } from "../utilities/ai-assistant-api.service";
+import { imageGenerationeFromAiAssistant } from "../utilities/ai-assistant-api.service";
 
 /**
  * Image panel class
@@ -33,7 +33,7 @@ export class ImagePanel {
     */
     public static render(context: vscode.ExtensionContext) {
 
-        // if exist show 
+        // if exist show
         if (ImagePanel.currentPanel) {
             ImagePanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
         } else {
@@ -85,7 +85,7 @@ export class ImagePanel {
 
                 switch (command) {
                     case "press-image-ask-button":
-                        this.askToChatGpt(message.data);
+                        this.askToAiAssistant(message.data);
                         return;
                     case "image-clicked":
                         vscode.env.openExternal(vscode.Uri.parse(message.data));
@@ -124,11 +124,11 @@ export class ImagePanel {
             <link rel="icon" type="image/jpeg" href="${logoMainPath}">
           </head>
           <body>
-                  
+
             <p class="answer-header mt-30"> Gallery </p>
-            <p class="info-message" id="image-error-id"></p>           
-            <div id="gallery-container">            
-            </div>            
+            <p class="info-message" id="image-error-id"></p>
+            <div id="gallery-container">
+            </div>
             <vscode-text-area class="text-area mt-20" id="prompt-text-id" cols="100">Prompt:</vscode-text-area>
             <div class="flex-container">
               <vscode-button id="ask-image-button-id">Generate Image</vscode-button>
@@ -142,10 +142,10 @@ export class ImagePanel {
     }
 
     /**
-     * Ask to ChatGpt a question ans send 'answer' command with data to mainview.js.
+     * Ask to AiAssistant a question ans send 'answer' command with data to mainview.js.
      * @param question :string
      */
-    private askToChatGpt(question: string) {
+    private askToAiAssistant(question: string) {
         const storeData = getStoreData(this._context);
         const existApiKey = storeData.apiKey;
         const existImageSize = storeData.imageSize;
@@ -158,7 +158,7 @@ export class ImagePanel {
             vscode.window.showInformationMessage('Please add response number!');
         }
         else {
-            imageGenerationeFromChatGpt(question, existApiKey, existResponseNumber).then(data => {
+            imageGenerationeFromAiAssistant(question, existApiKey, existResponseNumber).then(data => {
 
                 if (data.includes('Error')) {
                     ImagePanel.currentPanel?._panel.webview.postMessage({ command: 'image-error-answer', data: data });

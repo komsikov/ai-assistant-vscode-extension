@@ -8,7 +8,7 @@ import EventEmitter = require('events');
  * Click history question event emitter.
  */
 const clickHistoryQuestionEventEmitter = new EventEmitter();
-export { clickHistoryQuestionEventEmitter }
+export { clickHistoryQuestionEventEmitter };
 
 /**
  * Fire history question event.
