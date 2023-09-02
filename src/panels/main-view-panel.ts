@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { getStoreData, getNonce, getAsWebviewUri, setHistoryData, getVSCodeUri, getHistoryData } from "../utilities/utility.service";
-import { askToChatGptAsStream } from "../utilities/chat-gpt-api.service";
+import { askToChatGptAsStream } from "../utilities/ai-assistant-api.service";
 
 /**
  * Webview panel class
@@ -43,14 +43,14 @@ export class ChatGptPanel {
 
             // if not exist create a new one.
             const extensionUri: vscode.Uri = context.extensionUri;
-            const panel = vscode.window.createWebviewPanel("vscode-chat-gpt", "Ask To Chat Gpt", vscode.ViewColumn.One, {
+            const panel = vscode.window.createWebviewPanel("vscode-ai-assistant", "Ask To Chat Gpt", vscode.ViewColumn.One, {
                 // Enable javascript in the webview.
                 enableScripts: true,
                 // Restrict the webview to only load resources from the `out` directory.
                 localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'out')]
             });
 
-            const logoMainPath = getVSCodeUri(extensionUri, ['out/media', 'chat-gpt-logo.jpeg']);
+            const logoMainPath = getVSCodeUri(extensionUri, ['out/media', 'ai-assistant-logo.jpeg']);
             const icon = {
                 "light": logoMainPath,
                 "dark": logoMainPath
@@ -122,7 +122,7 @@ export class ChatGptPanel {
         const webviewUri = getAsWebviewUri(webview, extensionUri, ["out", "mainview.js"]);
         const nonce = getNonce();
         const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/media', 'vscode.css']);
-        const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/media', 'chat-gpt-logo.jpeg']);
+        const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/media', 'ai-assistant-logo.jpeg']);
 
         return /*html*/ `
         <!DOCTYPE html>

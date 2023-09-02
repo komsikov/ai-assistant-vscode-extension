@@ -6,7 +6,7 @@ const vscode = acquireVsCodeApi();
 window.addEventListener("load", main);
 
 // Declare Html elements.
-const startChatButton = document.getElementById("start-chat-gpt-button");
+const startChatButton = document.getElementById("start-ai-assistant-button");
 const imageButton = document.getElementById("image-generate-button");
 const apiKeySaveButton = document.getElementById("api-key-save-button-id") as any;
 const apiKeyTextField = document.getElementById("api-key-text-field-id") as any;

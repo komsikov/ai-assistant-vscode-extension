@@ -1,7 +1,7 @@
 // file: esbuild.js
 
 const { build } = require("esbuild");
-const copyStaticFiles = require('esbuild-copy-static-files')
+const copyStaticFiles = require('esbuild-copy-static-files');
 
 const baseConfig = {
     bundle: true,

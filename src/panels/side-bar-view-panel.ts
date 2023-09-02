@@ -3,7 +3,7 @@ import { getNonce, getAsWebviewUri, getStoreData, setStoreData } from '../utilit
 
 export class SideBarViewProvider implements vscode.WebviewViewProvider {
 
-	public static readonly viewType = 'chat-gpt-view-id';
+	public static readonly viewType = 'ai-assistant-view-id';
 	private _view?: vscode.WebviewView;
 
 	constructor(
@@ -68,14 +68,14 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 	 * start main panel. 
 	 */
 	private startChatGptWebViewPanel(): void {
-		vscode.commands.executeCommand('vscode-chat-gpt.start');
+		vscode.commands.executeCommand('vscode-ai-assistant.start');
 	}
 
 	/**
 	 * start image main  panel. 
 	 */
 	private startImageWebViewPanel(): void {
-		vscode.commands.executeCommand('vscode-chat-gpt.start-image');
+		vscode.commands.executeCommand('vscode-ai-assistant.start-image');
 	}
 
 	/**
@@ -113,7 +113,7 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 			<body>
 
 			<div class="flex-container">
-				<button id="start-chat-gpt-button">New Chat</button>			
+				<button id="start-ai-assistant-button">New Chat</button>			
 				<button id="image-generate-button" class="success">Images</button>
 			</div>
 			<p class="p-header mt-20" >General Settings</p>

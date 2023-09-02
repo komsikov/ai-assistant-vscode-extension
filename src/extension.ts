@@ -9,13 +9,13 @@ import { ImagePanel } from './panels/image-view-panel';
 export async function activate(context: vscode.ExtensionContext) {
 
 	// Chat panel register
-	const chatPanelCommand = vscode.commands.registerCommand("vscode-chat-gpt.start", () => {	
+	const chatPanelCommand = vscode.commands.registerCommand("vscode-ai-assistant.start", () => {	
 		ChatGptPanel.render(context);
 	});
 	context.subscriptions.push(chatPanelCommand);
 
 	// Image panel register
-	const imagePanelCommand = vscode.commands.registerCommand("vscode-chat-gpt.start-image", () => {	
+	const imagePanelCommand = vscode.commands.registerCommand("vscode-ai-assistant.start-image", () => {	
 		ImagePanel.render(context);
 	});
 	context.subscriptions.push(imagePanelCommand);

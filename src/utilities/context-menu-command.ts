@@ -1,22 +1,22 @@
 
 import * as vscode from 'vscode';
-import { promptToTextDavinci003 } from './chat-gpt-api.service';
+import { promptToTextDavinci003 } from './ai-assistant-api.service';
 import { window, ProgressLocation } from 'vscode';
 
 export function registerCommand(apiKey: string) {
 
     /*Refactor */
-    vscode.commands.registerCommand("vscode-chat-gpt.refactor", () => {
+    vscode.commands.registerCommand("vscode-ai-assistant.refactor", () => {
         refactorCode(apiKey)
     });
 
     /*Add Comment */
-    vscode.commands.registerCommand("vscode-chat-gpt.addComments", () => {
+    vscode.commands.registerCommand("vscode-ai-assistant.addComments", () => {
         addComment(apiKey);
     });
 
     /*Add Documentaion */
-    vscode.commands.registerCommand("vscode-chat-gpt.addDocumentaion", () => {
+    vscode.commands.registerCommand("vscode-ai-assistant.addDocumentaion", () => {
         addDocument(apiKey);
     });
 }

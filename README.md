@@ -40,10 +40,10 @@ Image generation defaults;
 ## Installation
 
 Your VSCode version number has to be greater than or equal to 1.77.0 version.
-Install from VSCode Extensions panel or [vscode-chat-gpt](https://marketplace.visualstudio.com/items?itemName=ikasann-self.vscode-chat-gpt) from VSCode Marketplace
+Install from VSCode Extensions panel or [vscode-ai-assistant](https://marketplace.visualstudio.com/items?itemName=ikasann-self.vscode-ai-assistant) from VSCode Marketplace
 
 ```bash
-  Go to Settings > Extensions > vscode-chat-gpt
+  Go to Settings > Extensions > vscode-ai-assistant
 ```
 ## Release Notes
 
@@ -59,40 +59,40 @@ Install from VSCode Extensions panel or [vscode-chat-gpt](https://marketplace.vi
 
 * Open chat panel.
 
-![alt text](https://github.com/ismailkasan/chat-gpt-vscode-extension/blob/main/src/images/start-and-api-key.gif?raw=true)
+![alt text](https://github.com/komsikov/ai-assistant-vscode-extension/blob/main/src/images/start-and-api-key.gif?raw=true)
 
 * Set api key.
 
-![alt text](https://github.com/ismailkasan/chat-gpt-vscode-extension/blob/main/src/images/extension.png?raw=true)
+![alt text](https://github.com/komsikov/ai-assistant-vscode-extension/blob/main/src/images/extension.png?raw=true)
 
 * Say hello!
 
-![alt text](https://github.com/ismailkasan/chat-gpt-vscode-extension/blob/main/src/images/extension-1.png?raw=true)
+![alt text](https://github.com/komsikov/ai-assistant-vscode-extension/blob/main/src/images/extension-1.png?raw=true)
 
 * Wite a simple typescript code that find squareroot of a number.
 
-![alt text](https://github.com/ismailkasan/chat-gpt-vscode-extension/blob/main/src/images/extension-2.png?raw=true)
+![alt text](https://github.com/komsikov/ai-assistant-vscode-extension/blob/main/src/images/extension-2.png?raw=true)
 
 * Click recent query in the history.
 
-![alt text](https://github.com/ismailkasan/chat-gpt-vscode-extension/blob/main/src/images/history-clear.gif?raw=true)
+![alt text](https://github.com/komsikov/ai-assistant-vscode-extension/blob/main/src/images/history-clear.gif?raw=true)
 
 * New Setting Panel.
 
-![alt text](https://github.com/ismailkasan/chat-gpt-vscode-extension/blob/main/src/images/new-ask-gpt.png?raw=true)
+![alt text](https://github.com/komsikov/ai-assistant-vscode-extension/blob/main/src/images/new-ask-gpt.png?raw=true)
 
 * New Image Generate Panel.
 
-![alt text](https://github.com/ismailkasan/chat-gpt-vscode-extension/blob/main/src/images/generate-image.png?raw=true)
+![alt text](https://github.com/komsikov/ai-assistant-vscode-extension/blob/main/src/images/generate-image.png?raw=true)
 
 * Add comments.
-![alt text](https://github.com/ismailkasan/chat-gpt-vscode-extension/blob/main/src/images/add-comment-1.png?raw=true)
+![alt text](https://github.com/komsikov/ai-assistant-vscode-extension/blob/main/src/images/add-comment-1.png?raw=true)
 
-![alt text](https://github.com/ismailkasan/chat-gpt-vscode-extension/blob/main/src/images/add-comment-2.png?raw=true)
+![alt text](https://github.com/komsikov/ai-assistant-vscode-extension/blob/main/src/images/add-comment-2.png?raw=true)
 
 * Add documentations.
 
-![alt text](https://github.com/ismailkasan/chat-gpt-vscode-extension/blob/main/src/images/add-documentation-1.png?raw=true)
+![alt text](https://github.com/komsikov/ai-assistant-vscode-extension/blob/main/src/images/add-documentation-1.png?raw=true)
 
 ## Roadmap
 

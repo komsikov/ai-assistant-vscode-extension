@@ -1,26 +1,24 @@
 {
-  "name": "vscode-chat-gpt",
-  "displayName": "vscode-chat-gpt",
+  "name": "vscode-ai-assistant",
+  "displayName": "vscode-ai-assistant",
   "description": "Extension uses ChatGpt Api to make chat compilations and image generations.",
-  "version": "1.2.0",
-  "publisher": "ikasann-self",
+  "version": "1.0.0",
+  "publisher": "komsikov",
   "bugs": {
-    "url": "https://github.com/ismailkasan/chat-gpt-vscode-extension/issues",
-    "email": "ismailkasan63@gmail.com"
+    "url": "https://github.com/komsikov/ai-assistant-vscode-extension/issues",
+    "email": "komsikov63@gmail.com"
   },
-  "homepage": "https://github.com/ismailkasan/chat-gpt-vscode-extension/main/README.md",
+  "homepage": "https://github.com/komsikov/ai-assistant-vscode-extension/main/README.md",
   "repository": {
-    "url": "https://github.com/ismailkasan/chat-gpt-vscode-extension",
+    "url": "https://github.com/komsikov/ai-assistant-vscode-extension",
     "type": "git"
   },
   "keywords": [
-    "openai",
-    "chatgpt",
     "gpt",
-    "chat",
+    "nlp",
     "ai"
   ],
-  "icon": "out/media/chat-gpt-logo.jpeg",
+  "icon": "out/media/ai-assistant-logo.jpeg",
   "galleryBanner": {
     "color": "#0000FF",
     "theme": "dark"
@@ -39,56 +37,56 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "chat-gpt-view",
+          "id": "ai-assistant-view",
           "title": "Chat Gpt",
           "icon": "./out/media/activity-bar-logo.svg"
         }
       ]
     },
     "views": {
-      "chat-gpt-view": [
+      "ai-assistant-view": [
         {
           "type": "webview",
-          "id": "chat-gpt-view-id",
+          "id": "ai-assistant-view-id",
           "name": "Chat Panel"
         }
       ]
     },
     "commands": [
       {
-        "command": "vscode-chat-gpt.start",
+        "command": "vscode-ai-assistant.start",
         "title": "Ask to ChatGpt"
       },
       {
-        "command": "vscode-chat-gpt.start-image",
+        "command": "vscode-ai-assistant.start-image",
         "title": "Start Image"
       },
       {
-        "command": "vscode-chat-gpt.refactor",
-        "title": "ChatGpt Refactor"   
+        "command": "vscode-ai-assistant.refactor",
+        "title": "ChatGpt Refactor"
       },
       {
-        "command": "vscode-chat-gpt.addComments",
+        "command": "vscode-ai-assistant.addComments",
         "title": "ChatGpt Add Comments"
       },
       {
-        "command": "vscode-chat-gpt.addDocumentaion",
+        "command": "vscode-ai-assistant.addDocumentaion",
         "title": "ChatGpt Add Documentaion"
       }
     ],
     "keybindings": [
       {
-        "command": "vscode-chat-gpt.addDocumentaion",
+        "command": "vscode-ai-assistant.addDocumentaion",
         "key": "ctrl+alt+d",
         "mac": "shift+cmd+d"
       },
       {
-        "command": "vscode-chat-gpt.addComments",
+        "command": "vscode-ai-assistant.addComments",
         "key": "ctrl+alt+c",
         "mac": "shift+cmd+c"
       },
       {
-        "command": "vscode-chat-gpt.refactor",
+        "command": "vscode-ai-assistant.refactor",
         "key": "ctrl+alt+r",
         "mac": "shift+cmd+r"
       }
@@ -96,24 +94,24 @@
     "menus": {
       "commandPalette": [
         {
-          "command": "vscode-chat-gpt.start",
+          "command": "vscode-ai-assistant.start",
           "when": "false"
         }
       ],
       "editor/context": [
         {
-          "command": "vscode-chat-gpt.refactor",
+          "command": "vscode-ai-assistant.refactor",
           "group": "ChatGpt",
-          "when": "editorLangId == typescript || editorLangId == javascript || editorLangId == csharp || editorLangId == java" 
+          "when": "editorLangId == typescript || editorLangId == javascript || editorLangId == csharp || editorLangId == java"
         },
         {
-          "command": "vscode-chat-gpt.addComments",
+          "command": "vscode-ai-assistant.addComments",
           "group": "ChatGpt"
         },
         {
-          "command": "vscode-chat-gpt.addDocumentaion",
+          "command": "vscode-ai-assistant.addDocumentaion",
           "group": "ChatGpt",
-          "when": "editorLangId == typescript || editorLangId == javascript || editorLangId == csharp || editorLangId == java" 
+          "when": "editorLangId == typescript || editorLangId == javascript || editorLangId == csharp || editorLangId == java"
         }
       ]
     },
@@ -121,16 +119,17 @@
       {
         "viewType": "markdown.preview",
         "icon": {
-          "light": "./out/media/chat-gpt-logo.jpeg",
-          "dark": "./out/media/chat-gpt-logo.jpeg"
+          "light": "./out/media/ai-assistant-logo.jpeg",
+          "dark": "./out/media/ai-assistant-logo.jpeg"
         }
       }
     ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "node ./esbuild.js",
-    "package": "NODE_ENV=production node ./esbuild.js",
+    "compile": "NODE_ENV=production node ./esbuild.js",
+    "compile:dev": "NODE_ENV=production node ./esbuild.js",
+    "package": "vsce",
     "watch": "node ./esbuild.js --watch",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
@@ -145,6 +144,7 @@
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
     "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^2.21.0",
     "esbuild": "^0.16.17",
     "esbuild-copy-static-files": "^0.1.0",
     "eslint": "^8.36.0",
