@@ -9,9 +9,6 @@ import {
 } from "model/context.model";
 import { askToAiAssistantAsStream } from "services/aiAssistantApi.service";
 
-/**
- * Webview panel class
- */
 export class ChatPanelView {
   public static currentPanel?: ChatPanelView;
   private readonly _panel: vscode.WebviewPanel;
@@ -186,6 +183,7 @@ export class ChatPanelView {
     const storeData = getStoreData(this._context);
     const existApiKey = storeData.apiKey;
     const existTemperature = storeData.temperature;
+
     if (existApiKey === undefined || existApiKey === null || existApiKey === '') {
       vscode.window.showInformationMessage('Please add your API key!');
     } else if (existTemperature === undefined || existTemperature === null || existTemperature === 0) {

@@ -7,12 +7,7 @@ window.addEventListener("load", main);
 
 // Declare Html elements.
 const startChatButton = document.getElementById("start-ai-assistant-button");
-const imageButton = document.getElementById("image-generate-button");
-const apiKeySaveButton = document.getElementById("api-key-save-button-id");
-const apiKeyTextField = document.getElementById("api-key-text-field-id") as HTMLInputElement;
-const temperatureTextField = document.getElementById("temperature-text-field-id") as HTMLInputElement;
-const imageNumberTextField = document.getElementById("image-number-text-field-id") as HTMLInputElement;
-const imageSizeTextField = document.getElementById("image-size-text-field-id") as HTMLInputElement;
+const startImageButton = document.getElementById("image-generate-button");
 
 /**
  * Main function
@@ -21,23 +16,15 @@ function main() {
 
   // Add event Listeners of Html elements.
   startChatButton?.addEventListener("click", handleStartButtonClick);
-  imageButton?.addEventListener("click", handleImageButtonClick);
-  apiKeySaveButton?.addEventListener("click", handleSaveClick);
+  startImageButton?.addEventListener("click", handleImageButtonClick);
 
   // Handle messages sent from the extension or panel to the webview
-  window.addEventListener('message', event => {
+  window.addEventListener('message', (event) => {
     const message = event.data; // The json data that the extension sent
     switch (message.command) {
       case 'settings-exist':
         // Append api key.
-        const apiKey = message.data.apiKey;
-        const temperature = message.data.temperature;
-        const responseNumber = message.data.responseNumber;
-        const imageSize = message.data.imageSize;
-        apiKeyTextField.value = apiKey;
-        temperatureTextField.value = temperature;
-        imageNumberTextField.value = responseNumber;
-        imageSizeTextField.value = imageSize;
+        console.log('"settings-exist" message');
         break;
       case 'error':
         console.log(message);
@@ -65,21 +52,5 @@ function handleImageButtonClick() {
   vscode.postMessage({
     command: "image-button-clicked-command",
     text: 'image-button',
-  });
-}
-
-/**
- * Handle save  click event.
- */
-function handleSaveClick() {
-  const data = {
-    apiKey: apiKeyTextField?.value,
-    temperature: temperatureTextField?.value,
-    responseNumber: imageNumberTextField?.value,
-    imageSize: imageSizeTextField?.value
-  };
-  vscode.postMessage({
-    command: "save-settings",
-    data: data,
   });
 }

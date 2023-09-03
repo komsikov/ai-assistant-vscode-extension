@@ -119,36 +119,6 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 				<button id="start-ai-assistant-button">New Chat</button>
 				<button id="image-generate-button" class="success">Images</button>
 			</div>
-			<p class="p-header mt-20" >General Settings</p>
-			<div class="form-flex-container">
-				<label>Api Key:</label>
-				<input id="api-key-text-field-id" placeholder="API key." />
-			</div>
-			<div class="form-flex-container">
-				<label>Temp:</label>
-				<input id="temperature-text-field-id" placeholder="0.8" />
-			</div>
-			<span class="info-message">
-				What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
-			</span>
-			<p class="p-header mt-20">Images Settings</p>
-			<div class="form-flex-container">
-				<label>Response Number:</label>
-				<input id="image-number-text-field-id" placeholder="Number of generated images." />
-			</div>
-			<span class="info-message">
-				Smaller sizes are faster to generate. You can request 1-5 images at a time using the n parameter.
-			</span>
-			<div class="form-flex-container">
-				<label>Size:</label>
-				<input id="image-size-text-field-id" placeholder="Size of images like '1024x1024'" />
-			</div>
-			<span class="info-message">
-				Generated images can have a size of 256x256, 512x512, or 1024x1024 pixels.
-			</span>
-			<div class="flex-container">
-				<button id="api-key-save-button-id">Save</button>
-			</div>
 
 			<script nonce="${nonce}" src="${scriptUri}"></script>
 			<div class="model">
