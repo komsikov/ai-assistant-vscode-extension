@@ -1,12 +1,17 @@
 import * as vscode from "vscode";
-import { getStoreData, getNonce, getAsWebviewUri, getVSCodeUri, getHistoryData } from "../utilities/utility.service";
-import { imageGenerationFromAiAssistant } from "../utilities/ai-assistant-api.service";
+import {
+  getStoreData,
+  getNonce,
+  getAsWebviewUri,
+  getVSCodeUri,
+} from "model/context.model";
+import { imageGenerationFromAiAssistant } from "services/aiAssistantApi.service";
 
 /**
  * Image panel class
  */
-export class ImagePanel {
-  public static currentPanel: ImagePanel | undefined;
+export class ImagePanelView {
+  public static currentPanel: ImagePanelView | undefined;
   private readonly _panel: vscode.WebviewPanel;
   private _disposables: vscode.Disposable[] = [];
   private _context: vscode.ExtensionContext;
@@ -34,8 +39,8 @@ export class ImagePanel {
   public static render(context: vscode.ExtensionContext) {
 
     // if exist show
-    if (ImagePanel.currentPanel) {
-      ImagePanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
+    if (ImagePanelView.currentPanel) {
+      ImagePanelView.currentPanel._panel.reveal(vscode.ViewColumn.One);
     } else {
 
       // if not exist create a new one.
@@ -47,14 +52,14 @@ export class ImagePanel {
         localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'out')]
       });
 
-      const logoMainPath = getVSCodeUri(extensionUri, ['out/media', 'ai-assistant-logo.png']);
+      const logoMainPath = getVSCodeUri(extensionUri, ['out/assets', 'ai-assistant-logo.png']);
       const icon = {
         "light": logoMainPath,
         "dark": logoMainPath
       };
       panel.iconPath = icon;
 
-      ImagePanel.currentPanel = new ImagePanel(context, panel, extensionUri);
+      ImagePanelView.currentPanel = new ImagePanelView(context, panel, extensionUri);
     }
   }
 
@@ -62,7 +67,7 @@ export class ImagePanel {
    * Dispose panel.
    */
   public dispose() {
-    ImagePanel.currentPanel = undefined;
+    ImagePanelView.currentPanel = undefined;
 
     this._panel.dispose();
 
@@ -75,7 +80,7 @@ export class ImagePanel {
   }
 
   /**
-   * Add listeners to catch messages from mainview js.
+   * Add listeners to catch messages from mainView js.
    * @param webview :vscode.Webview.
    */
   private _setWebviewMessageListener(webview: vscode.Webview) {
@@ -108,10 +113,10 @@ export class ImagePanel {
   private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
 
     // get uris from out directory based on vscode.extensionUri
-    const webviewUri = getAsWebviewUri(webview, extensionUri, ["out", "imageview.js"]);
+    const webviewUri = getAsWebviewUri(webview, extensionUri, ["out/views/webviews", "imageView.js"]);
     const nonce = getNonce();
-    const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/media', 'vscode.css']);
-    const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/media', 'ai-assistant-logo.png']);
+    const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/assets', 'vscode.css']);
+    const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/assets', 'ai-assistant-logo.png']);
 
     return /*html*/ `
         <!DOCTYPE html>
@@ -142,11 +147,13 @@ export class ImagePanel {
   }
 
   /**
-   * Ask to AiAssistant a question ans send 'answer' command with data to mainview.js.
+   * Ask to AiAssistant a question ans send 'answer' command with data to mainView.js.
    * @param question :string
    */
   private askToAiAssistant(question: string) {
     const storeData = getStoreData(this._context);
+    const config = vscode.workspace.getConfiguration();
+    console.log(config);
     const existApiKey = storeData.apiKey;
     const existImageSize = storeData.imageSize;
     const existResponseNumber = storeData.responseNumber;
@@ -161,9 +168,9 @@ export class ImagePanel {
       imageGenerationFromAiAssistant(question, existApiKey, existResponseNumber).then((data) => {
 
         if (data.includes('Error')) {
-          ImagePanel.currentPanel?._panel.webview.postMessage({ command: 'image-error-answer', data: data });
+          ImagePanelView.currentPanel?._panel.webview.postMessage({ command: 'image-error-answer', data: data });
         } else {
-          ImagePanel.currentPanel?._panel.webview.postMessage({ command: 'image-urls-answer', data: data });
+          ImagePanelView.currentPanel?._panel.webview.postMessage({ command: 'image-urls-answer', data: data });
         }
       });
     }

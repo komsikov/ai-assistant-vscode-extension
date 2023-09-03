@@ -10,7 +10,6 @@ import { Observable } from 'rxjs';
  */
 export async function askToAiAssistant(query: string | undefined, apiKey: string) {
   try {
-    // 👇️ const response: Response
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       body: JSON.stringify({
@@ -102,7 +101,7 @@ export async function promptToTextDavinci003(prompt: string, apiKey: string) {
       method: 'POST',
       body: JSON.stringify({
         model: "text-davinci-003",
-        prompt: prompt,
+        prompt,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         max_tokens: 2048,
         temperature: 0.0,
@@ -134,7 +133,7 @@ export async function promptToTextDavinci003(prompt: string, apiKey: string) {
 }
 
 /**
- * Create asnyc request to AiAssistant api to generate a new images.
+ * Create async request to AiAssistant api to generate a new images.
  * @param prompt
  * @param apiKey
  * @param n
@@ -148,7 +147,6 @@ export async function imageGenerationFromAiAssistant(
   size: string = "1024x1024",
 ) {
   try {
-    // 👇️ const response: Response
     const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       body: JSON.stringify({

@@ -1,5 +1,10 @@
 import * as vscode from 'vscode';
-import { getNonce, getAsWebviewUri, getStoreData, setStoreData } from '../utilities/utility.service';
+import {
+  getNonce,
+  getAsWebviewUri,
+  getStoreData,
+  setStoreData,
+} from 'model/context.model';
 
 export class SideBarViewProvider implements vscode.WebviewViewProvider {
 
@@ -85,10 +90,10 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
   private _getHtmlForWebview(webview: vscode.Webview, extensionUri: vscode.Uri) {
 
     // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-    const scriptUri = getAsWebviewUri(webview, extensionUri, ["out", "side-bar-view.js"]);
+    const scriptUri = getAsWebviewUri(webview, extensionUri, ["out/views/webviews", "sideBarView.js"]);
 
     // Do the same for the stylesheet.
-    const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/media', 'vscode.css']);
+    const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/assets', 'vscode.css']);
 
     // Use a nonce to only allow a specific script to be run.
     const nonce = getNonce();
@@ -117,7 +122,7 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 			<p class="p-header mt-20" >General Settings</p>
 			<div class="form-flex-container">
 				<label>Api Key:</label>
-				<input id="api-key-text-field-id" placeholder="AiAssistant api key." />
+				<input id="api-key-text-field-id" placeholder="API key." />
 			</div>
 			<div class="form-flex-container">
 				<label>Temp:</label>

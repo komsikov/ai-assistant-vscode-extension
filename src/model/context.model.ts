@@ -1,6 +1,6 @@
 import { Uri, Webview } from "vscode";
 import * as vscode from "vscode";
-import EventEmitter = require('events');
+import EventEmitter from 'events';
 
 
 /**

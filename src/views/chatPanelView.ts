@@ -1,12 +1,19 @@
 import * as vscode from "vscode";
-import { getStoreData, getNonce, getAsWebviewUri, setHistoryData, getVSCodeUri, getHistoryData } from "../utilities/utility.service";
-import { askToAiAssistantAsStream } from "../utilities/ai-assistant-api.service";
+import {
+  getStoreData,
+  getNonce,
+  getAsWebviewUri,
+  setHistoryData,
+  getVSCodeUri,
+  getHistoryData,
+} from "model/context.model";
+import { askToAiAssistantAsStream } from "services/aiAssistantApi.service";
 
 /**
  * Webview panel class
  */
-export class AiAssistantPanel {
-  public static currentPanel: AiAssistantPanel | undefined;
+export class ChatPanelView {
+  public static currentPanel?: ChatPanelView;
   private readonly _panel: vscode.WebviewPanel;
   private _disposables: vscode.Disposable[] = [];
   private _context: vscode.ExtensionContext;
@@ -20,7 +27,11 @@ export class AiAssistantPanel {
    * @param panel :vscode.WebviewPanel.
    * @param extensionUri :vscode.Uri.
    */
-  private constructor(context: vscode.ExtensionContext, panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
+  private constructor(
+    context: vscode.ExtensionContext,
+    panel: vscode.WebviewPanel,
+    extensionUri: vscode.Uri
+  ) {
     this._context = context;
     this._panel = panel;
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
@@ -37,8 +48,8 @@ export class AiAssistantPanel {
   */
   public static render(context: vscode.ExtensionContext) {
     // if exist show
-    if (AiAssistantPanel.currentPanel) {
-      AiAssistantPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
+    if (ChatPanelView.currentPanel) {
+      ChatPanelView.currentPanel._panel.reveal(vscode.ViewColumn.One);
     } else {
 
       // if not exist create a new one.
@@ -50,25 +61,25 @@ export class AiAssistantPanel {
         localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'out')]
       });
 
-      const logoMainPath = getVSCodeUri(extensionUri, ['out/media', 'ai-assistant-logo.png']);
+      const logoMainPath = getVSCodeUri(extensionUri, ['out/assets', 'ai-assistant-logo.png']);
       const icon = {
         "light": logoMainPath,
         "dark": logoMainPath
       };
       panel.iconPath = icon;
 
-      AiAssistantPanel.currentPanel = new AiAssistantPanel(context, panel, extensionUri);
+      ChatPanelView.currentPanel = new ChatPanelView(context, panel, extensionUri);
     }
 
     const historyData = getHistoryData(context);
-    AiAssistantPanel.currentPanel._panel.webview.postMessage({ command: 'history-data', data: historyData });
+    ChatPanelView.currentPanel._panel.webview.postMessage({ command: 'history-data', data: historyData });
   }
 
   /**
    * Dispose panel.
    */
   public dispose() {
-    AiAssistantPanel.currentPanel = undefined;
+    ChatPanelView.currentPanel = undefined;
 
     this._panel.dispose();
 
@@ -119,39 +130,39 @@ export class AiAssistantPanel {
   private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
 
     // get uris from out directory based on vscode.extensionUri
-    const webviewUri = getAsWebviewUri(webview, extensionUri, ["out", "mainview.js"]);
+    const webviewUri = getAsWebviewUri(webview, extensionUri, ["out/views/webviews", "mainView.js"]);
     const nonce = getNonce();
-    const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/media', 'vscode.css']);
-    const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/media', 'ai-assistant-logo.png']);
+    const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/assets', 'vscode.css']);
+    const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/assets', 'ai-assistant-logo.png']);
 
-    return /*html*/ `
-        <!DOCTYPE html>
-        <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'self' 'unsafe-inline'; font-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
-            <link href="${styleVSCodeUri}" rel="stylesheet">
-            <link rel="icon" type="image/jpeg" href="${logoMainPath}">
-          </head>
-          <body>
-            <p class="answer-header mt-30"> Answer : </p>
-            <pre><code class="code" id="answers-id"></code></pre>
-            <vscode-text-area class="text-area mt-20" id="question-text-id" cols="100">Question:</vscode-text-area>
-            <div class="flex-container">
-              <vscode-button id="ask-button-id">Ask</vscode-button>
-              <vscode-button class="danger" id="clear-button-id">Clear</vscode-button>
-              <vscode-button class="danger" id="clear-history-button">Clear History</vscode-button>
-              <vscode-progress-ring id="progress-ring-id"></vscode-progress-ring>
-            </div>
+    return `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'self' 'unsafe-inline'; font-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
+          <link href="${styleVSCodeUri}" rel="stylesheet">
+          <link rel="icon" type="image/jpeg" href="${logoMainPath}">
+        </head>
+        <body>
+          <p class="answer-header mt-30"> Answer : </p>
+          <pre><code class="code" id="answers-id"></code></pre>
+          <vscode-text-area class="text-area mt-20" id="question-text-id" cols="100">Question:</vscode-text-area>
+          <div class="flex-container">
+            <vscode-button id="ask-button-id">Ask</vscode-button>
+            <vscode-button class="danger" id="clear-button-id">Clear</vscode-button>
+            <vscode-button class="danger" id="clear-history-button">Clear History</vscode-button>
+            <vscode-progress-ring id="progress-ring-id"></vscode-progress-ring>
+          </div>
 
-            <p class="chat-history">Chat History</p>
-			<ul id="history-id">
-			</ul>
-            <script type="module" nonce="${nonce}" src="${webviewUri}"></script>
-          </body>
-        </html>
-        `;
+          <p class="chat-history">Chat History</p>
+          <ul id="history-id">
+          </ul>
+          <script type="module" nonce="${nonce}" src="${webviewUri}"></script>
+        </body>
+      </html>
+    `;
   }
 
   /**
@@ -176,13 +187,12 @@ export class AiAssistantPanel {
     const existApiKey = storeData.apiKey;
     const existTemperature = storeData.temperature;
     if (existApiKey === undefined || existApiKey === null || existApiKey === '') {
-      vscode.window.showInformationMessage('Please add your AiAssistant api key!');
+      vscode.window.showInformationMessage('Please add your API key!');
     } else if (existTemperature === undefined || existTemperature === null || existTemperature === 0) {
       vscode.window.showInformationMessage('Please add temperature!');
-    }
-    else {
-      askToAiAssistantAsStream(question, existApiKey, existTemperature).subscribe(answer => {
-        AiAssistantPanel.currentPanel?._panel.webview.postMessage({ command: 'answer', data: answer });
+    } else {
+      askToAiAssistantAsStream(question, existApiKey, existTemperature).subscribe((answer) => {
+        ChatPanelView.currentPanel?._panel.webview.postMessage({ command: 'answer', data: answer });
       });
     }
   }

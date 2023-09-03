@@ -18,7 +18,7 @@
     "nlp",
     "ai"
   ],
-  "icon": "out/media/ai-assistant-logo.png",
+  "icon": "out/assets/ai-assistant-logo.png",
   "galleryBanner": {
     "color": "#0000FF",
     "theme": "dark"
@@ -39,7 +39,7 @@
         {
           "id": "ai-assistant-view",
           "title": "AI Assistant",
-          "icon": "./out/media/activity-bar-logo.svg"
+          "icon": "./out/assets/activity-bar-logo.svg"
         }
       ]
     },
@@ -119,8 +119,8 @@
       {
         "viewType": "markdown.preview",
         "icon": {
-          "light": "./out/media/ai-assistant-logo.png",
-          "dark": "./out/media/ai-assistant-logo.png"
+          "light": "./out/assets/ai-assistant-logo.png",
+          "dark": "./out/assets/ai-assistant-logo.png"
         }
       }
     ],
