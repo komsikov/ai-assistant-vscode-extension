@@ -47,7 +47,7 @@ export class ImagePanel {
                 localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'out')]
             });
 
-            const logoMainPath = getVSCodeUri(extensionUri, ['out/media', 'ai-assistant-logo.jpeg']);
+            const logoMainPath = getVSCodeUri(extensionUri, ['out/media', 'ai-assistant-logo.png']);
             const icon = {
                 "light": logoMainPath,
                 "dark": logoMainPath
@@ -111,7 +111,7 @@ export class ImagePanel {
         const webviewUri = getAsWebviewUri(webview, extensionUri, ["out", "imageview.js"]);
         const nonce = getNonce();
         const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/media', 'vscode.css']);
-        const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/media', 'ai-assistant-logo.jpeg']);
+        const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/media', 'ai-assistant-logo.png']);
 
         return /*html*/ `
         <!DOCTYPE html>

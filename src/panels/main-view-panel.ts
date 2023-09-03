@@ -43,14 +43,14 @@ export class AiAssistantPanel {
 
             // if not exist create a new one.
             const extensionUri: vscode.Uri = context.extensionUri;
-            const panel = vscode.window.createWebviewPanel("vscode-ai-assistant", "Ask To Chat Gpt", vscode.ViewColumn.One, {
+            const panel = vscode.window.createWebviewPanel("vscode-ai-assistant", "Ask To AI Assistant", vscode.ViewColumn.One, {
                 // Enable javascript in the webview.
                 enableScripts: true,
                 // Restrict the webview to only load resources from the `out` directory.
                 localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'out')]
             });
 
-            const logoMainPath = getVSCodeUri(extensionUri, ['out/media', 'ai-assistant-logo.jpeg']);
+            const logoMainPath = getVSCodeUri(extensionUri, ['out/media', 'ai-assistant-logo.png']);
             const icon = {
                 "light": logoMainPath,
                 "dark": logoMainPath
@@ -122,7 +122,7 @@ export class AiAssistantPanel {
         const webviewUri = getAsWebviewUri(webview, extensionUri, ["out", "mainview.js"]);
         const nonce = getNonce();
         const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/media', 'vscode.css']);
-        const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/media', 'ai-assistant-logo.jpeg']);
+        const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/media', 'ai-assistant-logo.png']);
 
         return /*html*/ `
         <!DOCTYPE html>

@@ -26,7 +26,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(SideBarViewProvider.viewType, provider));
 
 	const storeData = getStoreData(context);
-	registerCommand(storeData.apiKey);
+	registerCommand(storeData?.apiKey);
 
 }
 

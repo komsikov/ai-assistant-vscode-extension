@@ -12,9 +12,9 @@ export { clickHistoryQuestionEventEmitter };
 
 /**
  * Fire history question event.
- * @param historyQuestion :string 
+ * @param historyQuestion :string
 */
-export function FireClickHistoryQuestionEvent(historyQuestion: string) {
+export function fireClickHistoryQuestionEvent(historyQuestion: string) {
   clickHistoryQuestionEventEmitter.emit('clickHistoryQuestion', historyQuestion);
 }
 
@@ -114,7 +114,7 @@ export function stateManager(context: vscode.ExtensionContext) {
       storeData: context.globalState.get('storeData')
     };
   }
-  
+
   function readHistory() {
     return {
       historyData: context.globalState.get('historyData')
