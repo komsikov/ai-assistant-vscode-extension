@@ -55,12 +55,18 @@ const sideBarViewConfig = {
 const testConfig = {
   ...baseConfig,
   // target: "es2020",
-  // format: "esm",
+  // format: "cjs",
   platform: 'node',
-  entryPoints: ["./src/test/runTest.ts"],
-  outfile: `./${destDir}/test/runTest.js`,
+  entryPoints: [
+    // "./src/test/**/*.ts",
+    "./src/test/suite/extension.test.ts",
+    "./src/test/suite/index.ts",
+    "./src/test/runTest.ts",
+  ],
+  outdir: `./${destDir}/test`,
+  // outfile: `./${destDir}/test/runTest.js`,
+  external: ["vscode", "mocha"],
 };
-
 
 const watchConfig = {
   watch: {

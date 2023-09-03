@@ -97,7 +97,6 @@ export function askToAiAssistantAsStream(query: string | undefined, apiKey: stri
 
 export async function promptToTextDavinci003(prompt: string, apikey: string) {
     try {
-        // 👇️ const response: Response
         const response = await fetch('https://api.openai.com/v1/completions', {
             method: 'POST',
             body: JSON.stringify({

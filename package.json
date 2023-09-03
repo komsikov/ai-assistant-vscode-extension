@@ -48,7 +48,7 @@
         {
           "type": "webview",
           "id": "ai-assistant-view-id",
-          "name": "   Panel"
+          "name": "Panel"
         }
       ]
     },
@@ -70,13 +70,13 @@
         "title": "AiAssistant Add Comments"
       },
       {
-        "command": "vscode-ai-assistant.addDocumentaion",
-        "title": "AiAssistant Add Documentaion"
+        "command": "vscode-ai-assistant.addDocumentation",
+        "title": "AiAssistant Add Documentation"
       }
     ],
     "keybindings": [
       {
-        "command": "vscode-ai-assistant.addDocumentaion",
+        "command": "vscode-ai-assistant.addDocumentation",
         "key": "ctrl+alt+d",
         "mac": "shift+cmd+d"
       },
@@ -109,7 +109,7 @@
           "group": "AiAssistant"
         },
         {
-          "command": "vscode-ai-assistant.addDocumentaion",
+          "command": "vscode-ai-assistant.addDocumentation",
           "group": "AiAssistant",
           "when": "editorLangId == typescript || editorLangId == javascript || editorLangId == csharp || editorLangId == java"
         }
@@ -128,14 +128,14 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "NODE_ENV=production node ./esbuild.js",
+    "compile:dev": "node ./esbuild.js",
     "watch": "node ./esbuild.js --watch",
-    "package": "vsce",
-    "pretest": "npm run compile && npm run lint",
+    "package": "vsce pack --out ./out",
+    "pretest": "npm run compile:dev && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
     "@types/vscode": "^1.77.0",
@@ -147,7 +147,7 @@
     "esbuild": "^0.16.17",
     "esbuild-copy-static-files": "^0.1.0",
     "eslint": "^8.36.0",
-    "glob": "^8.1.0",
+    "glob": "^10.3.4",
     "mocha": "^10.2.0",
     "typescript": "^4.9.5"
   },
