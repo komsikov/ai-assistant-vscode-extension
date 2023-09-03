@@ -92,7 +92,7 @@ export class ChatPanelView {
   }
 
   /**
-   * Add listeners to catch messages from mainview js.
+   * Add listeners to catch messages from mainView js.
    * @param webview :vscode.Webview.
    */
   private _setWebviewMessageListener(webview: vscode.Webview) {
@@ -130,7 +130,7 @@ export class ChatPanelView {
   private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
 
     // get uris from out directory based on vscode.extensionUri
-    const webviewUri = getAsWebviewUri(webview, extensionUri, ["out/views/webviews", "mainView.js"]);
+    const webviewUri = getAsWebviewUri(webview, extensionUri, ["out/controller", "chat.controller.js"]);
     const nonce = getNonce();
     const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/assets', 'vscode.css']);
     const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/assets', 'ai-assistant-logo.png']);
@@ -166,8 +166,8 @@ export class ChatPanelView {
   }
 
   /**
-   * Ask history question to AiAssistant and send 'history-question-clicked' command with data to mainview.js.
-   * @param hisrtoryQuestion :string
+   * Ask history question to AiAssistant and send 'history-question-clicked' command with data to mainView.js.
+   * @param historyQuestion :string
    */
   public clickHistoryQuestion(historyQuestion: string) {
     this.askToAiAssistant(historyQuestion);
@@ -179,7 +179,7 @@ export class ChatPanelView {
   }
 
   /**
-   * Ask to AiAssistant a question ans send 'answer' command with data to mainview.js.
+   * Ask to AiAssistant a question ans send 'answer' command with data to mainView.js.
    * @param question :string
    */
   private askToAiAssistant(question: string) {

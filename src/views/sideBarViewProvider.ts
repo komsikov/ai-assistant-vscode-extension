@@ -53,7 +53,7 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
           this.startAiAssistantWebViewPanel();
           break;
 
-        case "image-buton-clicked-command":
+        case "image-button-clicked-command":
           this.startImageWebViewPanel();
           break;
         case "save-settings":
@@ -90,7 +90,7 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
   private _getHtmlForWebview(webview: vscode.Webview, extensionUri: vscode.Uri) {
 
     // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-    const scriptUri = getAsWebviewUri(webview, extensionUri, ["out/views/webviews", "sideBarView.js"]);
+    const scriptUri = getAsWebviewUri(webview, extensionUri, ["out/controller", "sidebar.controller.js"]);
 
     // Do the same for the stylesheet.
     const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/assets', 'vscode.css']);

@@ -72,9 +72,8 @@ function main() {
           break;
       }
     });
-  } catch (err) {
-    console.log('errrr js');
-    console.log(err);
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -159,7 +158,7 @@ function showErrorMessage(message: string) {
 }
 
 /**
- * Show progessing ring.
+ * Show progressing ring.
  */
 function showProgressRing() {
   // add progress ring.

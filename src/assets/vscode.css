@@ -1,13 +1,22 @@
 :root {
-	--container-paddding: 20px;
+	--container-padding: 20px;
 	--input-padding-vertical: 6px;
 	--input-padding-horizontal: 4px;
 	--input-margin-vertical: 4px;
 	--input-margin-horizontal: 0;
+
+  --color-white-50: #fff;
+
+	--color-red-400: #e26d0e;
+  --color-red-500: #d9534f;
+	--color-red-600: #d43f3a;
+
+  --color-grey-300: #ccc;
+  --color-grey-400: #777;
 }
 
 body {
-	padding: 0 var(--container-paddding);
+	padding: 0 var(--container-padding);
 	color: var(--vscode-foreground);
 	font-size: var(--vscode-font-size);
 	font-weight: var(--vscode-font-weight);
@@ -17,7 +26,7 @@ body {
 
 ol,
 ul {
-	padding-left: var(--container-paddding);
+	padding-left: var(--container-padding);
 }
 
 body>*,
@@ -56,9 +65,9 @@ button {
 }
 
 button .danger {
-	color: #fff;
-	background-color: #d9534f;
-	border-color: #d43f3a
+	color: var(--color-white-50);
+	background-color: var(--color-red-500);
+	border-color: var(--color-red-600);
 }
 
 button:hover {
@@ -116,9 +125,9 @@ textarea::placeholder {
 }
 
 .danger {
-	color: #fff;
-	background-color: #d9534f;
-	border-color: #d43f3a
+	color: var(--color-white-50);
+	background-color: var(--color-red-500);
+	border-color: var(--color-red-600);
 }
 
 .answer-header {
@@ -167,19 +176,20 @@ textarea::placeholder {
 
 .info-message {
 	font-size: 11px;
-	color: #e26d0e;
+	color: var(--color-red-400);
 }
 
 
 div.gallery {
 	margin: 5px;
-	border: 1px solid #ccc;
+	border: 1px solid;
+	border-color: var(--color-grey-300);
 	float: left;
 	width: 180px;
 }
 
 div.gallery:hover {
-	border: 1px solid #777;
+	border: 1px solid var(--color-grey-400);
 }
 
 div.gallery img {
@@ -190,5 +200,5 @@ div.gallery img {
 div.desc {
 	padding: 15px;
 	text-align: center;
-	color: white;
+	color: var(--color-white-50);
 }

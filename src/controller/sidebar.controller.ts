@@ -19,7 +19,7 @@ const imageSizeTextField = document.getElementById("image-size-text-field-id") a
  */
 function main() {
 
-  // Add eventLsteners of Html elements.
+  // Add event Listeners of Html elements.
   startChatButton?.addEventListener("click", handleStartButtonClick);
   imageButton?.addEventListener("click", handleImageButtonClick);
   apiKeySaveButton?.addEventListener("click", handleSaveClick);
@@ -63,7 +63,7 @@ function handleStartButtonClick() {
 function handleImageButtonClick() {
   // Send messages to Panel.
   vscode.postMessage({
-    command: "image-buton-clicked-command",
+    command: "image-button-clicked-command",
     text: 'image-button',
   });
 }

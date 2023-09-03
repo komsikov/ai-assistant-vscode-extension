@@ -57,7 +57,7 @@ function addComment(apiKey: string) {
   switch (textEditor.document.languageId) {
     case 'html':
       {
-        let prompt = "Add comments for the following HTML code and format with 80 colums." + selectedText;
+        let prompt = "Add comments for the following HTML code and format with 80 columns." + selectedText;
         prompt = prompt.replace(/"/g, "'");
 
         promptToTextDavinci003(prompt, apiKey).then(result => {
@@ -67,7 +67,7 @@ function addComment(apiKey: string) {
       }
     case 'css':
       {
-        let prompt = "Add comments for the following CSS code and format with 80 colums." + selectedText;
+        let prompt = "Add comments for the following CSS code and format with 80 columns." + selectedText;
         prompt = prompt.replace(/"/g, "'");
 
         promptToTextDavinci003(prompt, apiKey).then(result => {
@@ -76,7 +76,7 @@ function addComment(apiKey: string) {
         break;
       }
     default:
-      const prompt = "Add comments for the following code and format with 80 colums." + selectedText;
+      const prompt = "Add comments for the following code and format with 80 columns." + selectedText;
 
       promptToTextDavinci003(prompt, apiKey).then(result => {
         textEditor.edit(editBuilder => editBuilder.replace(textEditor.selection, result + "\n" + selectedText));

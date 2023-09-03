@@ -113,7 +113,7 @@ export class ImagePanelView {
   private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
 
     // get uris from out directory based on vscode.extensionUri
-    const webviewUri = getAsWebviewUri(webview, extensionUri, ["out/views/webviews", "imageView.js"]);
+    const webviewUri = getAsWebviewUri(webview, extensionUri, ["out/controller", "image.controller.js"]);
     const nonce = getNonce();
     const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/assets', 'vscode.css']);
     const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/assets', 'ai-assistant-logo.png']);
