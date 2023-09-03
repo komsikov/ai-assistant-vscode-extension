@@ -3,99 +3,97 @@ import { getNonce, getAsWebviewUri, getStoreData, setStoreData } from '../utilit
 
 export class SideBarViewProvider implements vscode.WebviewViewProvider {
 
-	public static readonly viewType = 'ai-assistant-view-id';
-	private _view?: vscode.WebviewView;
+  public static readonly viewType = 'ai-assistant-view-id';
+  private _view?: vscode.WebviewView;
 
-	constructor(
-		private readonly _extensionUri: vscode.Uri,
-		private readonly _context: vscode.ExtensionContext,
-	) {
+  constructor(
+    private readonly _extensionUri: vscode.Uri,
+    private readonly _context: vscode.ExtensionContext,
+  ) { }
 
-	}
+  public resolveWebviewView(
+    webviewView: vscode.WebviewView,
+    context: vscode.WebviewViewResolveContext,
+    _token: vscode.CancellationToken,
+  ) {
 
-	public resolveWebviewView(
-		webviewView: vscode.WebviewView,
-		context: vscode.WebviewViewResolveContext,
-		_token: vscode.CancellationToken,
-	) {
+    this._view = webviewView;
 
-		this._view = webviewView;
+    webviewView.webview.options = {
+      // Allow scripts in the webview
+      enableScripts: true,
+      localResourceRoots: [vscode.Uri.joinPath(this._extensionUri, 'out')]
+    };
 
-		webviewView.webview.options = {
-			// Allow scripts in the webview
-			enableScripts: true,
-			localResourceRoots: [vscode.Uri.joinPath(this._extensionUri, 'out')]
-		};
+    webviewView.webview.html = this._getHtmlForWebview(webviewView.webview, this._extensionUri);
 
-		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview, this._extensionUri);
-
-		// Register message events that comes from the js.
-		this.addReceiveMessageEvents(webviewView.webview);
+    // Register message events that comes from the js.
+    this.addReceiveMessageEvents(webviewView.webview);
 
 
-		// Read the api key from globalState and send it to webview
-		const storeData = getStoreData(this._context);
-		this._view.webview.postMessage({ command: 'settings-exist', data: storeData });
-	}
+    // Read the api key from globalState and send it to webview
+    const storeData = getStoreData(this._context);
+    this._view.webview.postMessage({ command: 'settings-exist', data: storeData });
+  }
 
-	/**
-	 * Add listener for event comes from js.
-	 * @param webview :vscode.Webview
-	 */
-	private addReceiveMessageEvents(webview: vscode.Webview) {
-		webview.onDidReceiveMessage((message: any) => {
-			const command = message.command;
-			switch (command) {
-				case "start-chat-command":
-					this.startAiAssistantWebViewPanel();
-					break;
+  /**
+   * Add listener for event comes from js.
+   * @param webview :vscode.Webview
+   */
+  private addReceiveMessageEvents(webview: vscode.Webview) {
+    webview.onDidReceiveMessage((message: any) => {
+      const command = message.command;
+      switch (command) {
+        case "start-chat-command":
+          this.startAiAssistantWebViewPanel();
+          break;
 
-				case "image-buton-clicked-command":
-					this.startImageWebViewPanel();
-					break;
-				case "save-settings":
-					setStoreData(this._context, message.data);
-					const responseMessage = `Settings saved successfully.`;
-					vscode.window.showInformationMessage(responseMessage);
-					break;
-			}
-		},
-			undefined
-		);
-	}
+        case "image-buton-clicked-command":
+          this.startImageWebViewPanel();
+          break;
+        case "save-settings":
+          setStoreData(this._context, message.data);
+          const responseMessage = `Settings saved successfully.`;
+          vscode.window.showInformationMessage(responseMessage);
+          break;
+      }
+    },
+      undefined
+    );
+  }
 
-	/**
-	 * start main panel.
-	 */
-	private startAiAssistantWebViewPanel(): void {
-		vscode.commands.executeCommand('vscode-ai-assistant.start');
-	}
+  /**
+   * start main panel.
+   */
+  private startAiAssistantWebViewPanel(): void {
+    vscode.commands.executeCommand('vscode-ai-assistant.start');
+  }
 
-	/**
-	 * start image main  panel.
-	 */
-	private startImageWebViewPanel(): void {
-		vscode.commands.executeCommand('vscode-ai-assistant.start-image');
-	}
+  /**
+   * start image main  panel.
+   */
+  private startImageWebViewPanel(): void {
+    vscode.commands.executeCommand('vscode-ai-assistant.start-image');
+  }
 
-	/**
-	 * Gets html content of webview.
-	 * @param webview: vscode.Webview
-	 * @param extensionUri: vscode.Uri
-	 * @returns string
-	 */
-	private _getHtmlForWebview(webview: vscode.Webview, extensionUri: vscode.Uri) {
+  /**
+   * Gets html content of webview.
+   * @param webview: vscode.Webview
+   * @param extensionUri: vscode.Uri
+   * @returns string
+   */
+  private _getHtmlForWebview(webview: vscode.Webview, extensionUri: vscode.Uri) {
 
-		// Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-		const scriptUri = getAsWebviewUri(webview, extensionUri, ["out", "side-bar-view.js"]);
+    // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
+    const scriptUri = getAsWebviewUri(webview, extensionUri, ["out", "side-bar-view.js"]);
 
-		// Do the same for the stylesheet.
-		const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/media', 'vscode.css']);
+    // Do the same for the stylesheet.
+    const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/media', 'vscode.css']);
 
-		// Use a nonce to only allow a specific script to be run.
-		const nonce = getNonce();
+    // Use a nonce to only allow a specific script to be run.
+    const nonce = getNonce();
 
-		return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 			<html lang="en">
 			<head>
 				<meta charset="UTF-8">
@@ -119,7 +117,7 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 			<p class="p-header mt-20" >General Settings</p>
 			<div class="form-flex-container">
 				<label>Api Key:</label>
-				<input id="api-key-text-field-id" placeholder="OpenAi api key." />
+				<input id="api-key-text-field-id" placeholder="AiAssistant api key." />
 			</div>
 			<div class="form-flex-container">
 				<label>Temp:</label>
@@ -155,5 +153,5 @@ export class SideBarViewProvider implements vscode.WebviewViewProvider {
 			<div>
 			</body>
 			</html>`;
-	}
+  }
 }

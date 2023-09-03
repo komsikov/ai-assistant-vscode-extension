@@ -8,11 +8,11 @@ window.addEventListener("load", main);
 // Declare Html elements.
 const startChatButton = document.getElementById("start-ai-assistant-button");
 const imageButton = document.getElementById("image-generate-button");
-const apiKeySaveButton = document.getElementById("api-key-save-button-id") as any;
-const apiKeyTextField = document.getElementById("api-key-text-field-id") as any;
-const temperatureTextField = document.getElementById("temperature-text-field-id") as any;
-const imageNumberTextField = document.getElementById("image-number-text-field-id") as any;
-const imageSizeTextField = document.getElementById("image-size-text-field-id") as any;
+const apiKeySaveButton = document.getElementById("api-key-save-button-id");
+const apiKeyTextField = document.getElementById("api-key-text-field-id") as HTMLInputElement;
+const temperatureTextField = document.getElementById("temperature-text-field-id") as HTMLInputElement;
+const imageNumberTextField = document.getElementById("image-number-text-field-id") as HTMLInputElement;
+const imageSizeTextField = document.getElementById("image-size-text-field-id") as HTMLInputElement;
 
 /**
  * Main function
@@ -69,7 +69,7 @@ function handleImageButtonClick() {
 }
 
 /**
- * Handle save  click event. 
+ * Handle save  click event.
  */
 function handleSaveClick() {
     const data = {

@@ -3,7 +3,6 @@ import * as vscode from "vscode";
 import EventEmitter = require('events');
 
 
-
 /**
  * Click history question event emitter.
  */
@@ -45,7 +44,7 @@ export function getAsWebviewUri(webview: Webview, extensionUri: Uri, pathList: s
 /**
  * Create a vscode.Uri for source files.
  * @param extensionUri :vscode.Uri
- * @param pathList :strig[]
+ * @param pathList :string[]
  * @returns vscode.Uri
  */
 export function getVSCodeUri(extensionUri: Uri, pathList: string[]) {
@@ -61,9 +60,7 @@ export function setStoreData(context: vscode.ExtensionContext, storeData: any) {
   const state = stateManager(context);
 
   if (storeData !== undefined) {
-    state.write({
-      storeData: storeData
-    });
+    state.write('storeData', { storeData: storeData });
   }
 }
 
@@ -71,9 +68,7 @@ export function setHistoryData(context: vscode.ExtensionContext, historyData: an
   const state = stateManager(context);
 
   if (historyData !== undefined) {
-    state.writeHistory({
-      historyData: historyData
-    });
+    state.write(historyData, { historyData: historyData });
   }
 }
 
@@ -85,14 +80,14 @@ export function setHistoryData(context: vscode.ExtensionContext, historyData: an
 export function getStoreData(context: vscode.ExtensionContext): any {
   const state = stateManager(context);
 
-  const { storeData } = state.read();
-  return storeData as any;
+  const { storeData } = state.read('storeData');
+  return storeData;
 }
 
 export function getHistoryData(context: vscode.ExtensionContext): any {
   const state = stateManager(context);
 
-  const { historyData } = state.readHistory();
+  const { historyData } = state.read('historyData');
   return historyData as any;
 }
 
@@ -102,30 +97,18 @@ export function getHistoryData(context: vscode.ExtensionContext): any {
 * @returns void.
 */
 export function stateManager(context: vscode.ExtensionContext) {
+  const read = (key: string) => {
+    return {
+      [key]: context.globalState.get(key)
+    };
+  };
+
+  const write = (key: string, newState: any) => {
+    context.globalState.update(key, newState[key]);
+  };
+
   return {
     read,
     write,
-    writeHistory,
-    readHistory
   };
-
-  function read() {
-    return {
-      storeData: context.globalState.get('storeData')
-    };
-  }
-
-  function readHistory() {
-    return {
-      historyData: context.globalState.get('historyData')
-    };
-  }
-
-  function write(newState: any) {
-    context.globalState.update('storeData', newState.storeData);
-  }
-
-  function writeHistory(newState: any) {
-    context.globalState.update('historyData', newState.historyData);
-  }
 }

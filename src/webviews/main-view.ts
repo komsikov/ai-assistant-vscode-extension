@@ -1,13 +1,13 @@
 import {
-    provideVSCodeDesignSystem,
-    vsCodeButton,
-    vsCodeTextArea,
-    vsCodeDivider,
-    vsCodeProgressRing,
-    vsCodeTextField,
-    ProgressRing,
-    Button,
-    TextArea,
+  provideVSCodeDesignSystem,
+  vsCodeButton,
+  vsCodeTextArea,
+  vsCodeDivider,
+  vsCodeProgressRing,
+  vsCodeTextField,
+  ProgressRing,
+  Button,
+  TextArea,
 } from "@vscode/webview-ui-toolkit";
 
 /**
@@ -23,9 +23,7 @@ window.addEventListener("load", main);
 // declare an array for search history.
 let searchHistory: string[] = [];
 
-vscode.postMessage({
-    command: "history-request",
-});
+vscode.postMessage({ command: "history-request" });
 
 // Declare Html elements
 const answer = document.getElementById("answers-id") as HTMLElement;
@@ -44,112 +42,112 @@ const clearImageButton = document.getElementById("clear-image-button-id") as But
  */
 function main() {
 
-    hideProgressRing();
+  hideProgressRing();
 
-    // Add the eventLsteners.
-    askButton?.addEventListener("click", handleAskClick);
-    clearButton?.addEventListener("click", handleClearClick);
-    clearHistoryButton?.addEventListener("click", handleClearHistoryButtonClick);
+  // Add the eventLsteners.
+  askButton?.addEventListener("click", handleAskClick);
+  clearButton?.addEventListener("click", handleClearClick);
+  clearHistoryButton?.addEventListener("click", handleClearHistoryButtonClick);
 
-    // image button events
-    askImageButton?.addEventListener("click", handleImageAskClick);
-    clearImageButton?.addEventListener("click", handleImageClearClick);
+  // image button events
+  askImageButton?.addEventListener("click", handleImageAskClick);
+  clearImageButton?.addEventListener("click", handleImageClearClick);
 
-    // chat enter event
-    chatQuestionTextArea?.addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            // Trigger the button element with a click
-            handleAskClick();
-        }
-    });
-
-    // image enter event
-    promptTextArea?.addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            // Trigger the button element with a click
-            handleImageAskClick();
-        }
-    });
-
-    try {
-        // Handle messages sent from the extension to the webview
-        window.addEventListener('message', event => {
-            const message = event.data; // The json data that the extension sent
-            switch (message.command) {
-                case 'answer':
-                    // Append answer.
-                    const data = document.createTextNode(message.data);
-                    answer?.appendChild(data);
-                    break;
-                case 'history-data':
-                    searchHistory = message.data;
-                    updateHistoryList();
-                    break;
-                case 'image-urls-answer':
-                    // Append answer.
-                    const imageList = message.data as any[];
-                    updateImageList(imageList);
-                    hideProgressRing();
-                    break;
-                case 'image-error-answer':
-                    // Append answer.
-                    showErrorMessage(message.data);
-                    hideProgressRing();
-                    break;
-                case 'error':
-                    break;
-            }
-        });
-    } catch (err: any) {
-        console.log('errrr js');
-        console.log(err);
+  // chat enter event
+  chatQuestionTextArea?.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      // Trigger the button element with a click
+      handleAskClick();
     }
+  });
+
+  // image enter event
+  promptTextArea?.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      // Trigger the button element with a click
+      handleImageAskClick();
+    }
+  });
+
+  try {
+    // Handle messages sent from the extension to the webview
+    window.addEventListener('message', event => {
+      const message = event.data; // The json data that the extension sent
+      switch (message.command) {
+        case 'answer':
+          // Append answer.
+          const data = document.createTextNode(message.data);
+          answer?.appendChild(data);
+          break;
+        case 'history-data':
+          searchHistory = message.data;
+          updateHistoryList();
+          break;
+        case 'image-urls-answer':
+          // Append answer.
+          const imageList = message.data as any[];
+          updateImageList(imageList);
+          hideProgressRing();
+          break;
+        case 'image-error-answer':
+          // Append answer.
+          showErrorMessage(message.data);
+          hideProgressRing();
+          break;
+        case 'error':
+          break;
+      }
+    });
+  } catch (err: any) {
+    console.log('errrr js');
+    console.log(err);
+  }
 }
 
-//#region Chat
+// #region Chat
 
 /**
  * Handle ask button click event.
  */
 function handleAskClick() {
 
-    // Send messages to Panel.
-    vscode.postMessage({
-        command: "press-ask-button",
-        data: chatQuestionTextArea.value,
-    });
+  // Send messages to Panel.
+  vscode.postMessage({
+    command: "press-ask-button",
+    data: chatQuestionTextArea.value,
+  });
 
-    // Clear answer filed.
-    answer.innerHTML = '';
+  // Clear answer filed.
+  answer.innerHTML = '';
 
-    addHistory(chatQuestionTextArea.value);
+  addHistory(chatQuestionTextArea.value);
 }
 
 /**
  * Handle clear button click event.
  */
 function handleClearClick() {
-    // Clear answer field.
-    answer.innerHTML = '';
+  // Clear answer field.
+  answer.innerHTML = '';
 
-    // Clear question field.
-    chatQuestionTextArea.value = '';
+  // Clear question field.
+  chatQuestionTextArea.value = '';
 }
 
 /**
  * Handle clear button click event.
  */
 function handleClearHistoryButtonClick() {
-    searchHistory = [];
+  searchHistory = [];
 
-    // Send messages to Panel.
-    vscode.postMessage({
-        command: "clear-history",
-    });
+  // Send messages to Panel.
+  vscode.postMessage({
+    command: "clear-history",
+  });
 
-    updateHistoryList();
+  updateHistoryList();
 }
 
 /**
@@ -157,54 +155,54 @@ function handleClearHistoryButtonClick() {
  */
 function updateHistoryList() {
 
-    const ul = document.getElementById('history-id');
+  const ul = document.getElementById('history-id');
 
-    if (ul != null) {
-        ul.textContent = '';
-        let index = 0;
-        for (const content of searchHistory) {
-            if (content != undefined) {
+  if (ul !== null) {
+    ul.textContent = '';
+    let index = 0;
+    for (const content of searchHistory) {
+      if (content !== undefined) {
 
-                index++;
-                const spanContainer = document.createElement('span');
-                spanContainer.id = "container-span-id";
-                spanContainer.className = "flex-container";
-                spanContainer.style.marginTop = '15px';
+        index++;
+        const spanContainer = document.createElement('span');
+        spanContainer.id = "container-span-id";
+        spanContainer.className = "flex-container";
+        spanContainer.style.marginTop = '15px';
 
-                const spanNumber = document.createElement('span');
-                spanNumber.id = "span-number-id";
-                spanNumber.textContent = index + ') ';
-                spanNumber.style.minWidth = '10px';
-                spanNumber.style.width = '10px';
-                spanNumber.style.fontSize = '14px';
-                spanContainer.appendChild(spanNumber);
+        const spanNumber = document.createElement('span');
+        spanNumber.id = "span-number-id";
+        spanNumber.textContent = index + ') ';
+        spanNumber.style.minWidth = '10px';
+        spanNumber.style.width = '10px';
+        spanNumber.style.fontSize = '14px';
+        spanContainer.appendChild(spanNumber);
 
-                const li = document.createElement('li');
-                li.textContent = content.length > 50 ? content.substring(0, 250) + '...' : content;
-                li.addEventListener('click', () => {
-                    onHistoryClicked(content);
-                });
-                li.title = content;
-                li.style.cursor = 'pointer';
-                li.style.fontSize = '14px';
-                li.style.listStyleType = 'none';
+        const li = document.createElement('li');
+        li.textContent = content.length > 50 ? content.substring(0, 250) + '...' : content;
+        li.addEventListener('click', () => {
+          onHistoryClicked(content);
+        });
+        li.title = content;
+        li.style.cursor = 'pointer';
+        li.style.fontSize = '14px';
+        li.style.listStyleType = 'none';
 
-                spanContainer.appendChild(li);
-                ul.appendChild(spanContainer);
-            }
-        }
+        spanContainer.appendChild(li);
+        ul.appendChild(spanContainer);
+      }
     }
+  }
 }
 
 /**
  * Handle on click history question event.
  */
 function onHistoryClicked(question: string) {
-    vscode.postMessage({ command: 'history-question-clicked', data: question });
+  vscode.postMessage({ command: 'history-question-clicked', data: question });
 
-    // clear fields
-    answer.innerHTML = '';
-    chatQuestionTextArea.value = question;
+  // clear fields
+  answer.innerHTML = '';
+  chatQuestionTextArea.value = question;
 }
 
 /**
@@ -212,86 +210,84 @@ function onHistoryClicked(question: string) {
  * @param content :string
  */
 function addHistory(content: string) {
-    if (content != undefined) {
-        if (searchHistory.length < 10) {
-            if (!searchHistory.includes(content))
-                {searchHistory.unshift(content);}
-        }
-        if (searchHistory.length == 10) {
-            searchHistory.pop();
-            if (!searchHistory.includes(content)) {
-                searchHistory.unshift(content);
-            }
-        }
+  if (content !== undefined) {
+    if (searchHistory.length < 10) {
+      if (!searchHistory.includes(content)) { searchHistory.unshift(content); }
     }
-    updateHistoryList();
+    if (searchHistory.length === 10) {
+      searchHistory.pop();
+      if (!searchHistory.includes(content)) {
+        searchHistory.unshift(content);
+      }
+    }
+  }
+  updateHistoryList();
 }
 
-//#endregion Chat
+// #end region Chat
 
-//#region Image
+// #region Image
 
 /**
  * Update history list.
  */
 function updateImageList(imageUrls: any[]) {
 
-    const galleryContainer = document.getElementById('gallery-container');
+  const galleryContainer = document.getElementById('gallery-container');
 
-    if (galleryContainer != null) {
-        galleryContainer.textContent = '';
-        let index = 0;
-        for (const img of imageUrls) {
-            if (img != undefined) {
+  if (galleryContainer !== null) {
+    galleryContainer.textContent = '';
+    let index = 0;
+    for (const img of imageUrls) {
+      if (img !== undefined) {
 
-                index++;
+        index++;
 
-                const galleryDivTag = document.createElement('div');
-                galleryDivTag.className = "gallery";
+        const galleryDivTag = document.createElement('div');
+        galleryDivTag.className = "gallery";
 
-                const aTag = document.createElement('a');
-                aTag.target = '_blank';
-                aTag.href = img.url;
+        const aTag = document.createElement('a');
+        aTag.target = '_blank';
+        aTag.href = img.url;
 
-                const imgNode = document.createElement('img');
-                imgNode.src = img.url;
-                imgNode.width = 400;
-                imgNode.height = 400;
-                imgNode.alt = promptTextArea.value + '-' + index;
-                imgNode.style.cursor = 'pointer';
-                aTag.appendChild(imgNode);
+        const imgNode = document.createElement('img');
+        imgNode.src = img.url;
+        imgNode.width = 400;
+        imgNode.height = 400;
+        imgNode.alt = promptTextArea.value + '-' + index;
+        imgNode.style.cursor = 'pointer';
+        aTag.appendChild(imgNode);
 
-                const descDivTag = document.createElement('div');
-                descDivTag.className = "desc";
-                descDivTag.textContent = promptTextArea.value + '-' + index;
+        const descDivTag = document.createElement('div');
+        descDivTag.className = "desc";
+        descDivTag.textContent = promptTextArea.value + '-' + index;
 
-                galleryDivTag.appendChild(aTag);
-                galleryDivTag.appendChild(descDivTag);
-                galleryContainer.appendChild(galleryDivTag);
-            }
-        }
+        galleryDivTag.appendChild(aTag);
+        galleryDivTag.appendChild(descDivTag);
+        galleryContainer.appendChild(galleryDivTag);
+      }
     }
+  }
 }
-
 
 /**
  * Handle generate image button click event.
  */
 function handleImageAskClick() {
 
-    showProgressRing();
+  showProgressRing();
 
-    const pError = document.getElementById('image-error-id') as any;
-    pError.textContent = '';
+  const pError = document.getElementById('image-error-id') as any;
+  pError.textContent = '';
 
-    // Send messages to Panel.
-    vscode.postMessage({
-        command: "press-image-ask-button",
-        data: promptTextArea.value,
-    });
+  // Send messages to Panel.
+  vscode.postMessage({
+    command: "press-image-ask-button",
+    data: promptTextArea.value,
+  });
 
-    // Clear images filed.
-    updateImageList([]);
+  // Clear images filed.
+  updateImageList([]);
 }
 
 /**
@@ -299,35 +295,35 @@ function handleImageAskClick() {
  */
 function handleImageClearClick() {
 
-    // Clear images filed.
-    updateImageList([]);
+  // Clear images filed.
+  updateImageList([]);
 
-    // Clear question field.
-    promptTextArea.value = '';
+  // Clear question field.
+  promptTextArea.value = '';
 
 }
 
 
 function showErrorMessage(message: string) {
-    const pError = document.getElementById('image-error-id') as any;
-    pError.textContent = message;
+  const pError = document.getElementById('image-error-id') as any;
+  pError.textContent = message;
 }
 
-//#endregion Image
+// #end region Image
 
 /**
  * Show progessing ring.
  */
 function showProgressRing() {
-    // add progress ring.
-    const progressRing = document.getElementById("progress-ring-id") as ProgressRing;
-    progressRing.style.display = 'inline-block';
+  // add progress ring.
+  const progressRing = document.getElementById("progress-ring-id") as ProgressRing;
+  progressRing.style.display = 'inline-block';
 }
 
 /**
  * Hide progressing ring.
  */
 function hideProgressRing() {
-    const progressRing = document.getElementById("progress-ring-id") as ProgressRing;
-    progressRing.style.display = 'none';
+  const progressRing = document.getElementById("progress-ring-id") as ProgressRing;
+  progressRing.style.display = 'none';
 }

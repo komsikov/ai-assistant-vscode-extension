@@ -15,7 +15,7 @@ export function registerCommand(apiKey: string) {
         addComment(apiKey);
     });
 
-    /*Add Documentaion */
+    /*Add Documentation */
     vscode.commands.registerCommand("vscode-ai-assistant.addDocumentation", () => {
         addDocument(apiKey);
     });

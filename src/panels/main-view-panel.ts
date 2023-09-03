@@ -6,125 +6,125 @@ import { askToAiAssistantAsStream } from "../utilities/ai-assistant-api.service"
  * Webview panel class
  */
 export class AiAssistantPanel {
-    public static currentPanel: AiAssistantPanel | undefined;
-    private readonly _panel: vscode.WebviewPanel;
-    private _disposables: vscode.Disposable[] = [];
-    private _context: vscode.ExtensionContext;
+  public static currentPanel: AiAssistantPanel | undefined;
+  private readonly _panel: vscode.WebviewPanel;
+  private _disposables: vscode.Disposable[] = [];
+  private _context: vscode.ExtensionContext;
 
-    // declare an array for search history.
-    private searchHistory: string[] = [];
+  // declare an array for search history.
+  private searchHistory: string[] = [];
 
-    /**
-     * Constructor
-     * @param context :vscode.ExtensionContext.
-     * @param panel :vscode.WebviewPanel.
-     * @param extensionUri :vscode.Uri.
-     */
-    private constructor(context: vscode.ExtensionContext, panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
-        this._context = context;
-        this._panel = panel;
-        this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
+  /**
+   * Constructor
+   * @param context :vscode.ExtensionContext.
+   * @param panel :vscode.WebviewPanel.
+   * @param extensionUri :vscode.Uri.
+   */
+  private constructor(context: vscode.ExtensionContext, panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
+    this._context = context;
+    this._panel = panel;
+    this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
-        this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri);
-        this._setWebviewMessageListener(this._panel.webview);
+    this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri);
+    this._setWebviewMessageListener(this._panel.webview);
 
-        this.sendHistoryAgain();
+    this.sendHistoryAgain();
+  }
+
+  /**
+   * Render method of webview that is triggered from "extension.ts" file.
+   * @param context :vscode.ExtensionContext.
+  */
+  public static render(context: vscode.ExtensionContext) {
+    // if exist show
+    if (AiAssistantPanel.currentPanel) {
+      AiAssistantPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
+    } else {
+
+      // if not exist create a new one.
+      const extensionUri: vscode.Uri = context.extensionUri;
+      const panel = vscode.window.createWebviewPanel("vscode-ai-assistant", "Ask To AI Assistant", vscode.ViewColumn.One, {
+        // Enable javascript in the webview.
+        enableScripts: true,
+        // Restrict the webview to only load resources from the `out` directory.
+        localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'out')]
+      });
+
+      const logoMainPath = getVSCodeUri(extensionUri, ['out/media', 'ai-assistant-logo.png']);
+      const icon = {
+        "light": logoMainPath,
+        "dark": logoMainPath
+      };
+      panel.iconPath = icon;
+
+      AiAssistantPanel.currentPanel = new AiAssistantPanel(context, panel, extensionUri);
     }
 
-    /**
-     * Render method of webview that is triggered from "extension.ts" file.
-     * @param context :vscode.ExtensionContext.
-    */
-    public static render(context: vscode.ExtensionContext) {
-        // if exist show
-        if (AiAssistantPanel.currentPanel) {
-            AiAssistantPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
-        } else {
+    const historyData = getHistoryData(context);
+    AiAssistantPanel.currentPanel._panel.webview.postMessage({ command: 'history-data', data: historyData });
+  }
 
-            // if not exist create a new one.
-            const extensionUri: vscode.Uri = context.extensionUri;
-            const panel = vscode.window.createWebviewPanel("vscode-ai-assistant", "Ask To AI Assistant", vscode.ViewColumn.One, {
-                // Enable javascript in the webview.
-                enableScripts: true,
-                // Restrict the webview to only load resources from the `out` directory.
-                localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'out')]
-            });
+  /**
+   * Dispose panel.
+   */
+  public dispose() {
+    AiAssistantPanel.currentPanel = undefined;
 
-            const logoMainPath = getVSCodeUri(extensionUri, ['out/media', 'ai-assistant-logo.png']);
-            const icon = {
-                "light": logoMainPath,
-                "dark": logoMainPath
-            };
-            panel.iconPath = icon;
+    this._panel.dispose();
 
-            AiAssistantPanel.currentPanel = new AiAssistantPanel(context, panel, extensionUri);
+    while (this._disposables.length) {
+      const disposable = this._disposables.pop();
+      if (disposable) {
+        disposable.dispose();
+      }
+    }
+  }
+
+  /**
+   * Add listeners to catch messages from mainview js.
+   * @param webview :vscode.Webview.
+   */
+  private _setWebviewMessageListener(webview: vscode.Webview) {
+    webview.onDidReceiveMessage(
+      (message: any) => {
+        const command = message.command;
+
+        switch (command) {
+          case "press-ask-button":
+            this.askToAiAssistant(message.data);
+            this.addHistoryToStore(message.data);
+            return;
+          case "history-question-clicked":
+            this.clickHistoryQuestion(message.data);
+            break;
+          case "history-request":
+            this.sendHistoryAgain();
+            break;
+          case "clear-history":
+            this.clearHistory();
+            break;
         }
+      },
+      undefined,
+      this._disposables
+    );
+  }
 
-        const historyData = getHistoryData(context);
-        AiAssistantPanel.currentPanel._panel.webview.postMessage({ command: 'history-data', data: historyData });
-    }
+  /**
+   * Gets Html content of webview panel.
+   * @param webview :vscode.Webview.
+   * @param extensionUri :vscode.Uri.
+   * @returns string;
+   */
+  private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
 
-    /**
-     * Dispose panel.
-     */
-    public dispose() {
-        AiAssistantPanel.currentPanel = undefined;
+    // get uris from out directory based on vscode.extensionUri
+    const webviewUri = getAsWebviewUri(webview, extensionUri, ["out", "mainview.js"]);
+    const nonce = getNonce();
+    const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/media', 'vscode.css']);
+    const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/media', 'ai-assistant-logo.png']);
 
-        this._panel.dispose();
-
-        while (this._disposables.length) {
-            const disposable = this._disposables.pop();
-            if (disposable) {
-                disposable.dispose();
-            }
-        }
-    }
-
-    /**
-     * Add listeners to catch messages from mainview js.
-     * @param webview :vscode.Webview.
-     */
-    private _setWebviewMessageListener(webview: vscode.Webview) {
-        webview.onDidReceiveMessage(
-            (message: any) => {
-                const command = message.command;
-
-                switch (command) {
-                    case "press-ask-button":
-                        this.askToAiAssistant(message.data);
-                        this.addHistoryToStore(message.data);
-                        return;
-                    case "history-question-clicked":
-                        this.clickHistoryQuestion(message.data);
-                        break;
-                    case "history-request":
-                        this.sendHistoryAgain();
-                        break;
-                    case "clear-history":
-                        this.clearHistory();
-                        break;
-                }
-            },
-            undefined,
-            this._disposables
-        );
-    }
-
-    /**
-     * Gets Html content of webview panel.
-     * @param webview :vscode.Webview.
-     * @param extensionUri :vscode.Uri.
-     * @returns string;
-     */
-    private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
-
-        // get uris from out directory based on vscode.extensionUri
-        const webviewUri = getAsWebviewUri(webview, extensionUri, ["out", "mainview.js"]);
-        const nonce = getNonce();
-        const styleVSCodeUri = getAsWebviewUri(webview, extensionUri, ['out/media', 'vscode.css']);
-        const logoMainPath = getAsWebviewUri(webview, extensionUri, ['out/media', 'ai-assistant-logo.png']);
-
-        return /*html*/ `
+    return /*html*/ `
         <!DOCTYPE html>
         <html lang="en">
           <head>
@@ -152,54 +152,54 @@ export class AiAssistantPanel {
           </body>
         </html>
         `;
-    }
+  }
 
-    /**
-     * Ask history question to AiAssistant and send 'history-question-clicked' command with data to mainview.js.
-     * @param hisrtoryQuestion :string
-     */
-    public clickHistoryQuestion(historyQuestion: string) {
-        this.askToAiAssistant(historyQuestion);
-    }
+  /**
+   * Ask history question to AiAssistant and send 'history-question-clicked' command with data to mainview.js.
+   * @param hisrtoryQuestion :string
+   */
+  public clickHistoryQuestion(historyQuestion: string) {
+    this.askToAiAssistant(historyQuestion);
+  }
 
-    public sendHistoryAgain() {
-        const historyData = getHistoryData(this._context);
-        this._panel.webview.postMessage({ command: 'history-data', data: historyData });
-    }
+  public sendHistoryAgain() {
+    const historyData = getHistoryData(this._context);
+    this._panel.webview.postMessage({ command: 'history-data', data: historyData });
+  }
 
-    /**
-     * Ask to AiAssistant a question ans send 'answer' command with data to mainview.js.
-     * @param question :string
-     */
-    private askToAiAssistant(question: string) {
-        const storeData = getStoreData(this._context);
-        const existApiKey = storeData.apiKey;
-        const existTemperature = storeData.temperature;
-        if (existApiKey == undefined || existApiKey == null || existApiKey == '') {
-            vscode.window.showInformationMessage('Please add your AiAssistant api key!');
-        } else if (existTemperature == undefined || existTemperature == null || existTemperature == 0) {
-            vscode.window.showInformationMessage('Please add temperature!');
-        }
-        else {
-            askToAiAssistantAsStream(question, existApiKey, existTemperature).subscribe(answer => {
-                AiAssistantPanel.currentPanel?._panel.webview.postMessage({ command: 'answer', data: answer });
-            });
-        }
+  /**
+   * Ask to AiAssistant a question ans send 'answer' command with data to mainview.js.
+   * @param question :string
+   */
+  private askToAiAssistant(question: string) {
+    const storeData = getStoreData(this._context);
+    const existApiKey = storeData.apiKey;
+    const existTemperature = storeData.temperature;
+    if (existApiKey === undefined || existApiKey === null || existApiKey === '') {
+      vscode.window.showInformationMessage('Please add your AiAssistant api key!');
+    } else if (existTemperature === undefined || existTemperature === null || existTemperature === 0) {
+      vscode.window.showInformationMessage('Please add temperature!');
     }
+    else {
+      askToAiAssistantAsStream(question, existApiKey, existTemperature).subscribe(answer => {
+        AiAssistantPanel.currentPanel?._panel.webview.postMessage({ command: 'answer', data: answer });
+      });
+    }
+  }
 
-    clearHistory() {
-        this.searchHistory=[];
-        setHistoryData(this._context, this.searchHistory);
-    }
+  clearHistory() {
+    this.searchHistory = [];
+    setHistoryData(this._context, this.searchHistory);
+  }
 
-    addHistoryToStore(question: string) {
-        this.searchHistory=getHistoryData(this._context);
-        this.searchHistory.push(question);
-        setHistoryData(this._context, this.searchHistory);
-    }
+  addHistoryToStore(question: string) {
+    this.searchHistory = getHistoryData(this._context);
+    this.searchHistory.push(question);
+    setHistoryData(this._context, this.searchHistory);
+  }
 
-    getHistoryFromStore() {
-        const history = getHistoryData(this._context);
-       return history;
-    }
+  getHistoryFromStore() {
+    const history = getHistoryData(this._context);
+    return history;
+  }
 }
